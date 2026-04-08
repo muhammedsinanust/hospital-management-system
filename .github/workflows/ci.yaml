@@ -44,8 +44,7 @@ jobs:
       run: |
         docker push ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$TAG
         
-    - name: Build and analyze
+    - uses: SonarSource/sonarqube-scan-action@v6
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=test -Dsonar.projectName='test'
