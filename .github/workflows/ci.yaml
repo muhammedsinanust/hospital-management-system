@@ -1,50 +1,50 @@
-name: Docker Build & Trivy Scan
-run-name: Build-push
-on:
-  push:
-    branches: [ "actions" ]
+# name: Docker Build & Trivy Scan
+# run-name: Build-push
+# on:
+#   push:
+#     branches: [ "actions" ]
  
-jobs:
-  build-and-scan:
-    runs-on: ubuntu-latest
+# jobs:
+#   build-and-scan:
+#     runs-on: ubuntu-latest
  
-    env:
-      IMAGE_NAME: hospital-actions
-      TAG: v1.0.0
+#     env:
+#       IMAGE_NAME: hospital-actions
+#       TAG: v1.0.0
  
-    steps:
+#     steps:
  
-    - name: Checkout Code
-      uses: actions/checkout@v4
+#     - name: Checkout Code
+#       uses: actions/checkout@v4
  
-    - name: Set up Docker
-      uses: docker/setup-buildx-action@v3
+#     - name: Set up Docker
+#       uses: docker/setup-buildx-action@v3
  
-    - name: Build Docker Image
-      run: |
-        docker build -t $IMAGE_NAME:$TAG .
+#     - name: Build Docker Image
+#       run: |
+#         docker build -t $IMAGE_NAME:$TAG .
  
-    - name: Install Trivy
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y trivy
+#     - name: Install Trivy
+#       run: |
+#         sudo apt-get update
+#         sudo apt-get install -y trivy
  
-    - name: Scan Docker Image with Trivy
-      run: |
-        trivy image --severity HIGH,CRITICAL --exit-code 0 $IMAGE_NAME:$TAG
+#     - name: Scan Docker Image with Trivy
+#       run: |
+#         trivy image --severity HIGH,CRITICAL --exit-code 0 $IMAGE_NAME:$TAG
  
-    - name: Login DockerHub
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+#     - name: Login DockerHub
+#       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
  
-    - name: Tag Dockerimage
-      run: |
-        docker tag $IMAGE_NAME:$TAG ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$TAG
+#     - name: Tag Dockerimage
+#       run: |
+#         docker tag $IMAGE_NAME:$TAG ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$TAG
    
-    - name: Push Image
-      run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$TAG
+#     - name: Push Image
+#       run: |
+#         docker push ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$TAG
         
-    - uses: SonarSource/sonarqube-scan-action@v6
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+#     - uses: SonarSource/sonarqube-scan-action@v6
+#       env:
+#         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
