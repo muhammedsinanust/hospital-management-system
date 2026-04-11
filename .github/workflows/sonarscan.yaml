@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - actions
-      - main  # Added main for better coverage
-  pull_request: # Highly recommended
-    types: [opened, synchronize, reopened]
+  #     - main  # Added main for better coverage
+  # pull_request: # Highly recommended
+  #   types: [opened, synchronize, reopened]
 
 jobs:
   sonarqube:
