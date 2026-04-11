@@ -18,3 +18,4 @@ jobs:
         run: snyk monitor --file=backend/package.json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
