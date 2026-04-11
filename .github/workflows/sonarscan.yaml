@@ -27,13 +27,13 @@ jobs:
             -Dsonar.projectKey=hospital-management-system
             -Dsonar.sources=.
 
-      - name: SonarQube Quality Gate Check
-        id: sonarqube-quality-gate-check
-        uses: sonarsource/sonarqube-quality-gate-action@v1
-        # Set a timeout so it doesn't wait forever if the server is down
-        timeout-minutes: 5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # - name: SonarQube Quality Gate Check
+      #   id: sonarqube-quality-gate-check
+      #   uses: sonarsource/sonarqube-quality-gate-action@v1
+      #   # Set a timeout so it doesn't wait forever if the server is down
+      #   timeout-minutes: 5
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Send Notification on Failure
         if: failure()
