@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - actions
+      - main  # Added main for better coverage
+  pull_request: # Highly recommended
+    types: [opened, synchronize, reopened]
 
 jobs:
   sonarqube:
@@ -27,6 +30,8 @@ jobs:
       - name: SonarQube Quality Gate Check
         id: sonarqube-quality-gate-check
         uses: sonarsource/sonarqube-quality-gate-action@v1
+        # Set a timeout so it doesn't wait forever if the server is down
+        timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -38,8 +43,12 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "Pipeline failed"
-          body: "Ashuthos says that: SonarQube Scan Failed!* \nProject: ${{ github.repository }}\nStatus: Vulnerabilities or Quality Gate issues found.\nCheck the logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          subject: "❌ Pipeline Failed: ${{ github.repository }}"
+          body: |
+            Ashuthos says: SonarQube Scan Failed!
+            Project: ${{ github.repository }}
+            Status: Vulnerabilities or Quality Gate issues found.
+            Check the logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           to: ${{ secrets.RECIVER_EMAIL }}
           from: DevOps Alert
 
@@ -51,7 +60,11 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "Pipeline Success"
-          body: "Ashuthos says that: SonarQube Scan Failed!* \nProject: ${{ github.repository }}\nStatus: Vulnerabilities or Quality Gate issues found.\nCheck the logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          subject: "✅ Pipeline Success: ${{ github.repository }}"
+          body: |
+            Ashuthos says: SonarQube Scan Passed!
+            Project: ${{ github.repository }}
+            Status: All Quality Gates passed successfully.
+            View Report: ${{ secrets.SONAR_HOST_URL }}/dashboard?id=hospital-management-system
           to: ${{ secrets.RECIVER_EMAIL }}
           from: DevOps Alert
