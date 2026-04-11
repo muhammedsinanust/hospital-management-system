@@ -10,10 +10,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Run Snyk
-        uses: snyk/actions/node@master
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' 
+
+      - name: Install Snyk CLI
+        uses: snyk/actions/setup@master
+
+      - name: Snyk Monitor
+        run: snyk monitor --file=backend/package.json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          command: monitor
-          args: --all-projects --detection-depth=2
